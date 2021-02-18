@@ -2,8 +2,8 @@ import cobra as cb
 from functional import seq
 from sklearn_utils.preprocessing import FunctionalEnrichmentAnalysis
 
-import metabolitics.extensions
-from metabolitics.utils import load_network_model
+
+from utils import load_network_model
 
 
 class PathwayReactionEnrichment(FunctionalEnrichmentAnalysis):
@@ -11,7 +11,7 @@ class PathwayReactionEnrichment(FunctionalEnrichmentAnalysis):
 
     def __init__(self,
                  reference_label='healthy',
-                 network_model='recon2',
+                 network_model='recon3D',
                  **kwargs):
         '''
         :param str reference_label: label of refence values in the calculation

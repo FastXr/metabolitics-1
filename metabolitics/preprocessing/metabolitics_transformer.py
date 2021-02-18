@@ -1,20 +1,19 @@
 from joblib import Parallel, delayed
 from sklearn.base import TransformerMixin
 
-from metabolitics.analysis import MetaboliticsAnalysis
-
+from analysis import MetaboliticsAnalysis
 
 class MetaboliticsTransformer(TransformerMixin):
     """Performs metabolitics analysis and 
     convert metabolitic value into reaction min-max values."""
 
-    def __init__(self, network_model="recon2", n_jobs=-1):
+    def __init__(self, network_model='recon3D', drug='', target=''):
         '''
         :param network_model: cobra.Model or name of the model. 
         :param n_jobs: the maximum number of concurrently running jobs.
         '''
-        self.analyzer = MetaboliticsAnalysis(network_model)
-        self.n_jobs = n_jobs
+
+        self.analyzer = MetaboliticsAnalysis(model=network_model, drug=drug, target=target)
 
     def fit(self, X, y=None):
         return self
@@ -23,7 +22,7 @@ class MetaboliticsTransformer(TransformerMixin):
         '''
         :param X: list of dict which contains metabolic measurements.
         '''
-        return Parallel(n_jobs=self.n_jobs)(delayed(self._transform)(x)
+        return Parallel(n_jobs=-1)(delayed(self._transform)(x)
                                             for x in X)
 
     def _transform(self, x):

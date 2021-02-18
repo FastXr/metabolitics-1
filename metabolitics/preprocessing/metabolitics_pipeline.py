@@ -1,12 +1,13 @@
 from sklearn.feature_extraction import DictVectorizer
-from sklearn.preprocessing import Imputer, StandardScaler
+from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer
 from sklearn.feature_selection import VarianceThreshold, SelectKBest
 from sklearn.pipeline import Pipeline
 from sklearn_utils.preprocessing import *
 
-from metabolitics.preprocessing import *
-from metabolitics.utils import load_metabolite_mapping
-
+from . import *
+from utils import load_metabolite_mapping
+from .metabolite_diff_transformer import MetaboliteDiffTransformer
 
 class MetaboliticsPipeline(DynamicPipeline):
 
@@ -21,12 +22,13 @@ class MetaboliticsPipeline(DynamicPipeline):
 
     steps = {
         'metabolite-name-mapping': FeatureRenaming(load_metabolite_mapping()),
-        'imputer-mean': DictInput(Imputer(0, 'mean')),
+        'imputer-mean': DictInput(SimpleImputer(0, 'mean')),
         'standard-scaler': DictInput(StandardScaler()),
         'fold-change-scaler': FoldChangeScaler('healthy'),
         'metabolic-standard': StandardScalerByLabel('healthy'),
         'metabolitics-transformer': MetaboliticsTransformer(),
         'reaction-diff': ReactionDiffTransformer(),
+        'metabolite_diff': MetaboliteDiffTransformer(),
         'feature-selection': Pipeline([
             ('vt', DictInput(VarianceThreshold(0.1), feature_selection=True)),
             ('skb', DictInput(SelectKBest(k=100), feature_selection=True))
