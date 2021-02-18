@@ -18,13 +18,14 @@ def load_network_model(model):
         if model in ['ecoli', 'textbook', 'salmonella']:
             return cb.test.create_test_model(model)
         elif model == 'recon2':
-            return cb.io.load_json_model('%s/network_models/%s.json' %
-                                         (DATASET_PATH, model))
+            return cb.io.load_json_model('datasets/network_models/recon2.json')
+        elif model == 'recon3D':
+            return cb.io.load_json_model('datasets/network_models/Recon3D.json')
     if type(model) == cb.Model:
         return model
 
 
-def load_metabolite_mapping(naming_file='pubChem'):
+def load_metabolite_mapping(naming_file='synonym'):
     '''
     Loads metabolite name mapping from different databases to recon.
 
